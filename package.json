@@ -1,6 +1,6 @@
 {
   "name": "@45air/air-local-docker",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "45AIR Local Docker",
   "license": "MIT",
   "main": "index.js",
