@@ -1,0 +1,59 @@
+version: "3"
+services:
+  # Run a local dnsmasq server for the containers that will resolve DNS queries and
+  # route any *.test domains to the gateway container
+  dns:
+    image: andyshinn/dnsmasq
+    cap_add:
+      - NET_ADMIN
+    command: "-A /test/10.0.0.3 --log-facility=-"
+    networks:
+      airlocaldocker:
+        ipv4_address: 10.0.0.2
+  gateway:
+    image: 45air/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+    networks:
+      airlocaldocker:
+        ipv4_address: 10.0.0.3
+  mysql:
+    image: mysql:5
+    volumes:
+      - "mysqlData:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: password
+    networks:
+      - airlocaldocker
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+    environment:
+      MAILCATCHER_PORT: 1025
+    networks:
+      - airlocaldocker
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8092:80"
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+    networks:
+      - airlocaldocker
+networks:
+  airlocaldocker:
+    external:
+      name: "airlocaldocker"
+volumes:
+  mysqlData:
