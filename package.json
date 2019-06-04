@@ -1,16 +1,16 @@
 {
   "name": "@45air/air-local-docker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "45AIR Local Docker",
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "airdocker": "node index.js",
-    "airdocker-hosts": "./hosts.js"
+    "airlocal": "node index.js",
+    "airlocal-hosts": "./hosts.js"
   },
   "bin": {
-    "airdocker": "./index.js",
-    "airdocker-hosts": "./hosts.js"
+    "airlocal": "./index.js",
+    "airlocal-hosts": "./hosts.js"
   },
   "repository": {
     "type": "git",
