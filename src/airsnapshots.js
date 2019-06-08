@@ -12,9 +12,9 @@ const getSnapshotsDir = async function() {
 };
 
 const checkIfConfigured = async function() {
-    let wpsnapshotsDir = await getSnapshotsDir();
+    let airSnapshotsDir = await getSnapshotsDir();
 
-    if ( await fs.exists( path.join( wpsnapshotsDir, 'config.json' ) ) === false ) {
+    if ( await fs.exists( path.join( airSnapshotsDir, 'config.json' ) ) === false ) {
         return false;
     }
 
@@ -28,14 +28,14 @@ const command = async function() {
     let envPath = false;
 
     // Ensure that the wpsnapshots folder is created and owned by the current user versus letting docker create it so we can enforce proper ownership later
-    let wpsnapshotsDir = await getSnapshotsDir();
-    await fs.ensureDir( wpsnapshotsDir );
+    let airSnapshotsDir = await getSnapshotsDir();
+    await fs.ensureDir( airSnapshotsDir );
 
     // Except for a few whitelisted commands, enforce a configuration before proceeding
     if ( bypassCommands.indexOf( commandUtils.subcommand() ) === -1 ) {
         // Verify we have a configuration
         if ( await checkIfConfigured() === false ) {
-            console.error( chalk.red( "Error: " ) + "Air Snapshots does not have a configuration file. Please run 'airlocal airsnapshots configure' before continuing." );
+            console.error( chalk.red( "Error: " ) + "AirSnapshots does not have a configuration file. Please run 'airlocal airsnapshots configure' before continuing." );
             process.exit();
         }
     }
@@ -44,7 +44,7 @@ const command = async function() {
     if ( noPathCommands.indexOf( commandUtils.subcommand() ) === -1 ) {
         let envSlug = await envUtils.parseOrPromptEnv();
         if ( envSlug === false ) {
-            console.error( chalk.red( "Error: " ) + "Unable to determine which environment to use air snapshots with. Please run this command from within your environment." );
+            console.error( chalk.red( "Error: " ) + "Unable to determine which environment to use AirSnapshots with. Please run this command from within your environment." );
             process.exit(1);
         }
         envPath = await envUtils.envPath( envSlug );
@@ -56,10 +56,10 @@ const command = async function() {
     // @todo update the image version once new images are merged
     try{
         if ( envPath === false ) {
-            execSync( `docker run -it --rm -v "${wpsnapshotsDir}:/home/wpsnapshots/.wpsnapshots" 45air/airsnapshots:dev ${command}`, { stdio: 'inherit' });
+            execSync( `docker run -it --rm -v "${wpsnapshotsDir}:/home/airsnapshots/.airsnapshots" 45air/airsnapshots:dev ${command}`, { stdio: 'inherit' });
         } else {
             await gateway.startGlobal();
-            execSync( `docker run -it --rm --network airlocaldocker -v "${envPath}/wordpress:/var/www/html" -v "${wpsnapshotsDir}:/home/wpsnapshots/.wpsnapshots" 45air/airsnapshots:dev --db_user=root ${command}`, { stdio: 'inherit' });
+            execSync( `docker run -it --rm --network airlocaldocker -v "${envPath}/wordpress:/var/www/html" -v "${wpsnapshotsDir}:/home/airsnapshots/.airsnapshots" 45air/airsnapshots:dev --db_user=root ${command}`, { stdio: 'inherit' });
         }
     } catch (ex) {}
 };

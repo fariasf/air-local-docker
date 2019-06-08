@@ -15,7 +15,6 @@ const images = [
     '45air/phpfpm:7.1',
     '45air/phpfpm:7.0',
     '45air/phpfpm:5.6',
-    '45air/phpfpm:5.5',
     '45air/wpsnapshots:dev',
     'memcached:latest',
     'nginx:latest',

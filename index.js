@@ -3,7 +3,7 @@
 const chalk = require( 'chalk' );
 const commandUtils = require( './src/command-utils' );
 const config = require( './src/configure' );
-const snapshots = require( './src/wpsnapshots' );
+const snapshots = require( './src/airsnapshots' );
 
 const help = function() {
     let help = `
@@ -21,7 +21,7 @@ Commands:
   start         Starts a specific docker environment
   stop          Stops a specific docker environment
   wp            Runs a wp-cli command in your current environment
-  airsnapshots   Runs a air snapshots command
+  airsnapshots  Runs a air snapshots command
 
 Run 'airlocal COMMAND help' for more information on a command.
 `;
@@ -75,7 +75,7 @@ const init = async function() {
             break;
         case 'snapshots':
         case 'airsnapshots':
-            await require('./src/wpsnapshots').command();
+            await require('./src/airsnapshots').command();
             break;
         case 'cache':
             await require('./src/cache').command();

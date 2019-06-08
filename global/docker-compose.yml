@@ -1,4 +1,5 @@
 version: "3"
+
 services:
   # Run a local dnsmasq server for the containers that will resolve DNS queries and
   # route any *.test domains to the gateway container
@@ -10,6 +11,7 @@ services:
     networks:
       airlocaldocker:
         ipv4_address: 10.0.0.2
+
   gateway:
     image: 45air/nginx-proxy
     ports:
@@ -20,8 +22,9 @@ services:
     networks:
       airlocaldocker:
         ipv4_address: 10.0.0.3
+
   mysql:
-    image: mysql:5.6
+    image: mysql:5
     volumes:
       - "mysqlData:/var/lib/mysql"
     ports:
@@ -32,6 +35,7 @@ services:
       MYSQL_PASSWORD: password
     networks:
       - airlocaldocker
+
   mailcatcher:
     image: schickling/mailcatcher
     ports:
@@ -41,6 +45,7 @@ services:
       MAILCATCHER_PORT: 1025
     networks:
       - airlocaldocker
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
@@ -51,9 +56,11 @@ services:
       PMA_HOST: mysql
     networks:
       - airlocaldocker
+
 networks:
   airlocaldocker:
     external:
       name: "airlocaldocker"
+
 volumes:
   mysqlData:
