@@ -1,42 +1,42 @@
-const helper = require( './helpers' );
+const helper = require('./helpers')
 
-const validateNotEmpty = function( value ) {
-    return ( value.trim().length !== 0 ) ? true : "This field is required";
-};
+const validateNotEmpty = function (value) {
+  return (value.trim().length !== 0) ? true : 'This field is required'
+}
 
-const validateBool = function( value ) {
-    var y = new RegExp( /^y(es)?$/i );
-    var n = new RegExp( /^no?$/i );
+const validateBool = function (value) {
+  var y = new RegExp(/^y(es)?$/i)
+  var n = new RegExp(/^no?$/i)
 
-    if ( typeof value !== 'string' ) {
-        return value;
-    }
+  if (typeof value !== 'string') {
+    return value
+  }
 
-    if ( value.match( y ) !== null ) {
-        return 'true';
-    } else if ( value.match( n ) !== null ) {
-        return 'false';
-    }
+  if (value.match(y) !== null) {
+    return 'true'
+  } else if (value.match(n) !== null) {
+    return 'false'
+  }
 
-    return value;
-};
+  return value
+}
 
 /*
 Not foolproof, but should catch some more common issues with entering hostnames
  */
-const parseHostname = function( value ) {
-    // Get rid of any http(s):// prefix
-    value = value.replace( /^https?:\/\//i, '' );
+const parseHostname = function (value) {
+  // Get rid of any http(s):// prefix
+  value = value.replace(/^https?:\/\//i, '')
 
-    // Get rid of any spaces
-    value = value.replace( /\s/i, '' );
+  // Get rid of any spaces
+  value = value.replace(/\s/i, '')
 
-    let parts = value.split( '/' );
+  let parts = value.split('/')
 
-    let hostname = parts[0];
+  let hostname = parts[0]
 
-    return hostname;
-};
+  return hostname
+}
 
 /**
  * Check to make sure proxy URLs have a protcol attached
@@ -44,14 +44,14 @@ const parseHostname = function( value ) {
  * @param  string value 	Proxy URL to check against
  * @return string       	The validated/modified proxy URL
  */
-const parseProxyUrl = function( value ) {
-    let re = /^https?:\/\//i;
+const parseProxyUrl = function (value) {
+  let re = /^https?:\/\//i
 
-    if ( value.length > 3 && ! re.test( value ) ) {
-        value = 'http://' + value;
-    }
+  if (value.length > 3 && !re.test(value)) {
+    value = 'http://' + value
+  }
 
-    return helper.removeEndSlashes( value );
+  return helper.removeEndSlashes(value)
 }
 
-module.exports = { validateNotEmpty, validateBool, parseHostname, parseProxyUrl };
+module.exports = { validateNotEmpty, validateBool, parseHostname, parseProxyUrl }
