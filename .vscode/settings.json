@@ -1,0 +1,15 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.detectIndentation": false,
+  "prettier.disableLanguages": [
+    "javascript"
+  ],
+  "javascript.format.enable": false,
+  "standard.autoFixOnSave": true,
+  "standard.usePackageJson": true,
+  "typescript.format.enable": false,
+  "eslint.autoFixOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  "eslint.enable": true
+}
