@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "forty-five-air",
+  "private_key_id": "b1c86e4309b34d1db18c98f38c798e7a9642671d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCju5YXqCgihDQz\nEAKaoYuOT9Je61KzWJuNX2jfA2VZw6DIoIf7ZBHHiUsgdUvfknDD8SWGerjrWfCT\nz/rgB/H3pUh/i3EatNs1oSq/g+9Do9rvHgszTF+q9RTfRRNAjyUl/MBiPdBeBpDA\nNfpmrMLBsbGdIsLj/OJpEnYSyIXLIb0+9x+gFXlhD8jszqosopC3U0w9lw2Y4TOC\nt/SPA+AVUjaWnjdhustcrbUPml2u/xhGxmoDVHX5LbWG7YSvIl5sHGuj4cKDok9Y\nNFxLbSDIoDVJMPBDL6cqBB0xrddta5SjXwV7GbXLrsQFAFTk5ntfAljUwoBZSy77\nPNRMfTFhAgMBAAECggEAFCXSr+GM4sZy5++p6l5DnoT7BZwehpw6M/jQHlU8JQIa\nKGX8pbYoK+4clQdqCT5raukjLXuvgqKEJKQ8olHH+CnaFHvTtK4ZpW1KJdv11tR0\nbeU8Cpl00kQrR9gnqNOUhiqmf9BMci2LpWNfB0BuDMixav0qj0SAld5kMiaDtD2l\nru3jEL8Gfg5Wk5vBBSsQOnNDpJRH0MQ4lxYaZWO8DCN3Nwl7TgwpP394f6KtL1+y\n5bdUclRGyxolGV1qgUv6ebEKkubuVh6lYb/lmmTo+B5C2cz6DsaKwkK4Eco+RDnn\nrXKW3iS9TSiczxi+ur+EGkX/KbXfZIkEYTixOhdAAwKBgQDVMDsFzo9ijcp2D+Tf\nQrPL+NLTozIB3rRlndKLv/e3rTAFwx9tVuwVTqRwj6GmXhAUJbMkt8LIX2tQkM7p\nEdPA9b7RJjOAJksGud2M1XDYcywVbTQIThUeyT/8lFj8LLK5rWWpvlXDycP1Y4gE\nINoku/SiwjSkM+NBrytuJ5ouFwKBgQDEnOX4sHWfTmlRNsUr+Uc+Fdya9IS+35WQ\ncZh2XR0oph0JdqM8hri0AJXs9lbwKw0BcxQvpARNUyF6Mqeu0BkeIawEzbkjzzEM\nQq9lmd8pZfgV48VLg8If2d7UXXPWPPyZpvBRMOG9KCfaHY5Js/ZH8jRIQ2AY/I3h\nMfC4Wit/RwKBgBm1QjjWCuZokNSh4AioQ4RCUjIhSON+1qQ2XvBpStcEdHkNaZnG\n1JtRK3VDbMviJfA4B51S55NAJnHFtJ3Yf3+SYttXzvgSJhP+j9/u0TfY06UV0SN7\nPwLCZAvyW7S1Myw+47aPdEoy54WM5hcRWxz46WxDHRP8Cdie5g7XibkrAoGATCln\nIGXiunpaa75mtLkUsuUvFst/nJzpyBFo+Pjq8bMfbmoJo8mgRQIxEaD/Xnuexx/4\nAthrXjTEtBxpPluYT0bF5vp2LHv3SQOQBDCN9PBuILSh2bXJfiMcoXEuDSCEzVSQ\npTLlTyv9/A0U8FIJJieZvyByWluC7mg1EoTDcsMCgYEAk+D2ts8azgByU+AbkCj+\n3B36MpK3vcytHK24nin27quZy49atkSeHQn/Mmate41JcAzIPN6FuskNMQ7l0OcA\nhQWWXXal2LQ9+o74Wr7W0BtRCpcR6xxv31vS4GYopfplmJoDRJSJ4U0aMNCJd9S7\nkQSIAj4TJP7RI/sFIjnp5k0=\n-----END PRIVATE KEY-----\n",
+  "client_email": "air-local-docker-logger@forty-five-air.iam.gserviceaccount.com",
+  "client_id": "115664898002785208603",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/air-local-docker-logger%40forty-five-air.iam.gserviceaccount.com"
+}
