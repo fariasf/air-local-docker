@@ -3,7 +3,7 @@ const os = require('os')
 const fs = require('fs-extra')
 const path = require('path')
 const inquirer = require('inquirer')
-const promptValidators = require('./prompt-validators')
+const helpers = require('./util/helpers')
 
 // Tracks current config
 let config = null
@@ -126,7 +126,7 @@ const prompt = async function () {
       type: 'input',
       message: 'What directory would you like Air Local Docker to create environments within?',
       default: currentDir || defaults.sitesPath,
-      validate: promptValidators.validateNotEmpty,
+      validate: helpers.validateNotEmpty,
       filter: resolveHome,
       transformer: resolveHome
     },
@@ -135,7 +135,7 @@ const prompt = async function () {
       type: 'input',
       message: 'What directory would you like to store Air Snapshots data within?',
       default: currentSnapshots || defaults.snapshotsPath,
-      validate: promptValidators.validateNotEmpty,
+      validate: helpers.validateNotEmpty,
       filter: resolveHome,
       transformer: resolveHome
     },
@@ -159,7 +159,7 @@ const promptUnconfigured = async function () {
       type: 'confirm',
       message: 'Air Local Docker is not configured. Would you like to configure using default settings?',
       default: '',
-      validate: promptValidators.validateNotEmpty
+      validate: helpers.validateNotEmpty
     }
   ]
 
@@ -181,15 +181,15 @@ const configureDefaults = async function () {
 /**
  * Create the NGINX directive to set a media URL proxy
  *
- * @param  string proxy     	The URL to set the proxy to
- * @param  string curConfig 	Complete content of the existing config file
- * @return string          		New content for the config file
+ * @param {string} proxy The URL to set the proxy to
+ * @param {string} curConfig Complete content of the existing config file
+ * @return {string} New content for the config file
  */
 const createProxyConfig = (proxy, curConfig) => {
   let proxyMarkup = 'location @production {' + '\r\n' +
-		'        resolver 8.8.8.8;' + '\r\n' +
-		'        proxy_pass ' + proxy + '/$uri;' + '\r\n' +
-		'    }'
+    '        resolver 8.8.8.8;' + '\r\n' +
+    '        proxy_pass ' + proxy + '/$uri;' + '\r\n' +
+    '    }'
 
   let proxyMapObj = {
     '#{TRY_PROXY}': 'try_files $uri @production;',

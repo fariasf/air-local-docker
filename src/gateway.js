@@ -1,6 +1,6 @@
 const execSync = require('child_process').execSync
 const exec = require('child_process').exec
-const envUtils = require('./env-utils')
+const { globalPath, cacheVolume } = require('./util/variables')
 
 // Tracks if we've started global inside of this session
 let started = false
@@ -30,23 +30,23 @@ const removeNetwork = function () {
 const ensureCacheExists = async function () {
   try {
     console.log('Ensuring global cache volume exists')
-    let volumes = await exec(`docker volume ls --filter name=${envUtils.cacheVolume}`).toString()
-    if (volumes.indexOf(`${envUtils.cacheVolume}`) !== -1) {
+    let volumes = await exec(`docker volume ls --filter name=${cacheVolume}`).toString()
+    if (volumes.indexOf(`${cacheVolume}`) !== -1) {
       console.log(' - Volume Exists')
       return
     }
 
     console.log(' - Creating Volume')
-    await exec(`docker volume create ${envUtils.cacheVolume}`)
+    await exec(`docker volume create ${cacheVolume}`)
   } catch (ex) {}
 }
 
 const removeCacheVolume = async function () {
   try {
     console.log('Removing cache volume')
-    let volumes = await exec(`docker volume ls --filter name=${envUtils.cacheVolume}`).toString()
-    if (volumes.indexOf(`${envUtils.cacheVolume}`) === -1) {
-      await exec(`docker volume rm ${envUtils.cacheVolume}`)
+    let volumes = await exec(`docker volume ls --filter name=${cacheVolume}`).toString()
+    if (volumes.indexOf(`${cacheVolume}`) === -1) {
+      await exec(`docker volume rm ${cacheVolume}`)
       console.log(' - Volume Removed')
     }
   } catch (ex) {}
@@ -83,7 +83,7 @@ const waitForDB = function () {
   return new Promise(resolve => {
     let interval = setInterval(() => {
       console.log('Waiting for mysql...')
-      let mysql = execSync(`docker-compose logs mysql`, { cwd: envUtils.globalPath }).toString()
+      let mysql = execSync(`docker-compose logs mysql`, { cwd: globalPath }).toString()
 
       if (mysql.indexOf(readyMatch) !== -1) {
         if (occurrences(mysql, firstTimeMatch, false) !== 0) {
@@ -106,7 +106,7 @@ const waitForDB = function () {
 
 const startGateway = async function () {
   console.log('Ensuring global services are running')
-  execSync(`docker-compose up -d`, { stdio: 'inherit', cwd: envUtils.globalPath })
+  execSync(`docker-compose up -d`, { stdio: 'inherit', cwd: globalPath })
 
   await waitForDB()
   console.log()
@@ -114,13 +114,13 @@ const startGateway = async function () {
 
 const stopGateway = function () {
   console.log('Stopping global services')
-  execSync(`docker-compose down`, { stdio: 'inherit', cwd: envUtils.globalPath })
+  execSync(`docker-compose down`, { stdio: 'inherit', cwd: globalPath })
   console.log()
 }
 
 const restartGateway = function () {
   console.log('Restarting global services')
-  execSync(`docker-compose restart`, { stdio: 'inherit', cwd: envUtils.globalPath })
+  execSync(`docker-compose restart`, { stdio: 'inherit', cwd: globalPath })
   console.log()
 }
 

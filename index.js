@@ -3,9 +3,16 @@
 const chalk = require('chalk')
 const commander = require('commander')
 const inquirer = require('inquirer')
+
+const configure = require('./src/configure')
+const create = require('./src/create')
 const auth = require('./src/auth')
 const cache = require('./src/cache')
 const snapshots = require('./src/snapshots')
+const image = require('./src/image')
+const hosts = require('./src/hosts')
+
+const updates = require('./src/util/updates')
 const logger = require('./src/util/logger').logger
 const log = console.log
 
@@ -16,17 +23,19 @@ const error = chalk.bold.red
 const warning = chalk.keyword('orange')
 const info = chalk.keyword('cyan')
 
-process.on('unhandledRejection', (reason, p) => {
-  // Unhandled promise rejection, lets handle this on our fallback handler
+// Unhandled promise rejection
+process.on('unhandledRejection', (reason) => {
+  // Re-throw and handle this on our execption handler
   throw reason
 })
 
-process.on('uncaughtException', (err) => {
-  // Final stop for all unhandled errors
-  logger.error((new Date()).toUTCString() + ' uncaughtException:', err)
+// Uncaught error handling
+process.on('uncaughtException', (error) => {
+  logger.error(error)
   process.exit(1)
 })
 
+// Init the CLI
 const program = new commander.Command()
 
 /**
@@ -38,18 +47,19 @@ program
   .alias('config')
   .description(info('Set up your AIRLocal environment'))
   .action(function () {
-    process.exit(1)
+    configure.command()
   })
 
 /**
  * AIRLOCAL CREATE
+ * Alias: new
 */
 program
   .command('create')
   .alias('new')
   .description(info('Create a new web local environment'))
   .action(function () {
-    process.exit(1)
+    create.command()
   })
 
 /**
@@ -188,17 +198,31 @@ program
     }
 
     log('WIP')
-    process.exit(1)
   }).on('--help', function () {
     snapshots.help()
-    process.exit(1)
   })
 
+/**
+ * AIRLOCAL IMAGE <CMD>
+ *
+ * Subcommands:
+ *   - update
+ */
 program
-  .command('images <cmd>')
+  .command('image <cmd>')
   .description(info('Manages docker images used by this environment'))
   .action(function (cmd) {
-    log('images', cmd)
+    // Valid subcommands
+    const valid = ['update']
+    if (valid.indexOf(cmd) === -1) {
+      // Show the help menu as fallback if valid subcommand not used
+      image.help()
+      process.exit(1)
+    }
+
+    image.updateAll()
+  }).on('--help', function () {
+    image.help()
   })
 
 program
@@ -246,20 +270,38 @@ program
 program
   .command('logs [env]')
   .description(info('Streams docker logs') + chalk.gray(' (default: all containers)'))
-  .action(function (env, cmd) {
-    log('logs', env, cmd)
+  .action(function (env) {
+    log('logs', env)
+  })
+
+program
+  .command('hosts <cmd> [host]')
+  .description(info('Manage the hosts file'))
+  .action(function (cmd, host) {
+    // Valid subcommands
+    const valid = ['add', 'remove']
+    if (valid.indexOf(cmd) === -1) {
+      // Show the help menu as fallback if valid subcommand not used
+      hosts.help()
+      process.exit(1)
+    }
+  }).on('--help', function () {
+    hosts.help()
   })
 
 program
   .command('version')
-  .description(info('Show the CLI version'))
-  .action(function () {
+  .description(info('Show AIRLocal CLI version'))
+  .action(async function () {
+    await updates.checkForUpdates()
     log()
     log(info('AIRLocal v%s'), version)
     log()
   })
 
 program.parse(process.argv)
+
+updates.checkForUpdates()
 
 function makeWhite (txt) {
   return chalk.white(txt)

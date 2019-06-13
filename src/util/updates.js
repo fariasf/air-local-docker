@@ -14,7 +14,7 @@ async function checkForUpdates () {
   }
 
   if (update) {
-    console.warn(chalk.yellow(`Air Local Docker version ${update.latest} is now available. Please run \`npm update -g air-local-docker\` to update!`))
+    console.warn(chalk.yellow(`AIRLocal version ${update.latest} is now available. Please run \`npm update -g air-local-docker\` to update!`))
   }
 }
 

@@ -5,12 +5,10 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "airlocal": "node index.js",
-    "airlocal-hosts": "./hosts.js"
+    "airlocal": "node index.js"
   },
   "bin": {
-    "airlocal": "./index.js",
-    "airlocal-hosts": "./hosts.js"
+    "airlocal": "./index.js"
   },
   "repository": {
     "type": "git",

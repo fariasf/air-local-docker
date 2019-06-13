@@ -1,27 +1,18 @@
-const commandUtils = require('./command-utils')
+const chalk = require('chalk')
 const path = require('path')
 const fs = require('fs-extra')
 const yaml = require('write-yaml')
 const inquirer = require('inquirer')
-const promptValidators = require('./prompt-validators')
+const sudo = require('sudo-prompt')
 const database = require('./database')
 const gateway = require('./gateway')
-const environment = require('./environment.js')
+const environment = require('./environment')
 const wordpress = require('./wordpress')
-const envUtils = require('./env-utils')
-const sudo = require('sudo-prompt')
 const config = require('./configure')
-const chalk = require('chalk')
-
-const help = function () {
-  let help = `
-Usage: airlocal create
-
-Creates a new docker environment interactively.
-`
-  console.log(help)
-  process.exit()
-}
+const helpers = require('./util/helpers')
+const utils = require('./util/utilities')
+const env = require('./util/env')
+const { srcPath, cacheVolume } = require('./util/variables')
 
 const createEnv = async function () {
   var baseConfig = {
@@ -77,9 +68,9 @@ const createEnv = async function () {
   var volumeConfig = {
     'volumes': {}
   }
-  volumeConfig.volumes[ envUtils.cacheVolume ] = {
+  volumeConfig.volumes[ cacheVolume ] = {
     'external': {
-      'name': `${envUtils.cacheVolume}`
+      'name': `${cacheVolume}`
     }
   }
 
@@ -88,8 +79,8 @@ const createEnv = async function () {
       name: 'hostname',
       type: 'input',
       message: 'What is the primary hostname for your site? (Ex: docker.test)',
-      validate: promptValidators.validateNotEmpty,
-      filter: promptValidators.parseHostname
+      validate: helpers.validateNotEmpty,
+      filter: helpers.parseHostname
     },
     {
       name: 'addMoreHosts',
@@ -106,7 +97,7 @@ const createEnv = async function () {
           return value.trim()
         }).filter(function (value) {
           return value.length > 0
-        }).map(promptValidators.parseHostname)
+        }).map(helpers.parseHostname)
 
         return answers
       },
@@ -125,10 +116,10 @@ const createEnv = async function () {
       type: 'input',
       message: 'Proxy URL',
       default: function (answers) {
-        return envUtils.createDefaultProxy(answers.hostname)
+        return env.createDefaultProxy(answers.hostname)
       },
-      validate: promptValidators.validateNotEmpty,
-      filter: promptValidators.parseProxyUrl,
+      validate: helpers.validateNotEmpty,
+      filter: helpers.parseProxyUrl,
       when: function (answers) {
         return answers.mediaProxy === true
       }
@@ -180,7 +171,7 @@ const createEnv = async function () {
       default: function (answers) {
         return answers.hostname
       },
-      validate: promptValidators.validateNotEmpty,
+      validate: helpers.validateNotEmpty,
       when: function (answers) {
         return answers.wordpress === true
       }
@@ -190,7 +181,7 @@ const createEnv = async function () {
       type: 'input',
       message: 'Admin Username',
       default: 'admin',
-      validate: promptValidators.validateNotEmpty,
+      validate: helpers.validateNotEmpty,
       when: function (answers) {
         return answers.wordpress === true
       }
@@ -200,7 +191,7 @@ const createEnv = async function () {
       type: 'input',
       message: 'Admin Password',
       default: 'password',
-      validate: promptValidators.validateNotEmpty,
+      validate: helpers.validateNotEmpty,
       when: function (answers) {
         return answers.wordpress === true
       }
@@ -210,7 +201,7 @@ const createEnv = async function () {
       type: 'input',
       message: 'Admin Email',
       default: 'admin@example.com',
-      validate: promptValidators.validateNotEmpty,
+      validate: helpers.validateNotEmpty,
       when: function (answers) {
         return answers.wordpress === true
       }
@@ -221,8 +212,8 @@ const createEnv = async function () {
 
   // Folder name inside of /sites/ for this site
   let envHost = answers.hostname
-  let envSlug = envUtils.envSlug(envHost)
-  let envPath = await envUtils.envPath(envHost)
+  let envSlug = utils.envSlug(envHost)
+  let envPath = await utils.envPath(envHost)
 
   // Default nginx configuration file
   let nginxConfig = 'default.conf'
@@ -262,7 +253,7 @@ const createEnv = async function () {
       './wordpress:/var/www/html:cached',
       './config/php-fpm/php.ini:/usr/local/etc/php/php.ini:cached',
       './config/php-fpm/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:cached',
-      `${envUtils.cacheVolume}:/var/www/.wp-cli/cache:cached`,
+      `${cacheVolume}:/var/www/.wp-cli/cache:cached`,
       '~/.ssh:/root/.ssh:cached'
     ],
     'depends_on': [
@@ -312,7 +303,7 @@ const createEnv = async function () {
   console.log('Copying required files...')
 
   await fs.ensureDir(path.join(envPath, 'wordpress'))
-  await fs.copy(path.join(envUtils.srcPath, 'config'), path.join(envPath, 'config'))
+  await fs.copy(path.join(srcPath, 'config'), path.join(envPath, 'config'))
 
   // Write Docker Compose
   console.log('Generating docker-compose.yml file...')
@@ -413,14 +404,7 @@ const createEnv = async function () {
 }
 
 const command = async function () {
-  switch (commandUtils.subcommand()) {
-    case 'help':
-      help()
-      break
-    default:
-      await createEnv()
-      break
-  }
+  await createEnv()
 }
 
-module.exports = { command, help }
+module.exports = { command }
